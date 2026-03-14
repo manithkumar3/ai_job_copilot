@@ -129,6 +129,9 @@ svg {
 .nav a,
 .ghost-button,
 .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     padding: 10px 16px;
     border-radius: 999px;
     color: var(--text);
@@ -805,7 +808,7 @@ textarea {
 
 .job-secondary-actions {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 10px;
 }
 

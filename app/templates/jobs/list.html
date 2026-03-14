@@ -66,6 +66,9 @@
                 </form>
                 <div class="job-secondary-actions">
                     <button type="button" class="ghost-button" data-modal-open="reminder-modal-{{ job.id }}">Add reminder</button>
+                    {% if job.job_link %}
+                        <a href="{{ job.job_link }}" target="_blank" rel="noopener noreferrer" class="ghost-button">Open link</a>
+                    {% endif %}
                     <a href="/jobs/{{ job.id }}" class="secondary-button">View</a>
                 </div>
             </div>

@@ -1,5 +1,6 @@
 from functools import lru_cache
 from pathlib import Path
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -53,10 +54,21 @@ class Settings(BaseSettings):
             return value
         normalized = value.strip()
         if normalized.startswith("postgres://"):
-            return normalized.replace("postgres://", "postgresql+psycopg://", 1)
-        if normalized.startswith("postgresql://") and "+psycopg://" not in normalized:
-            return normalized.replace("postgresql://", "postgresql+psycopg://", 1)
-        return normalized
+            normalized = normalized.replace("postgres://", "postgresql+psycopg://", 1)
+        elif normalized.startswith("postgresql://") and "+psycopg://" not in normalized:
+            normalized = normalized.replace("postgresql://", "postgresql+psycopg://", 1)
+
+        if not normalized.startswith("postgresql+psycopg://"):
+            return normalized
+
+        parsed = urlsplit(normalized)
+        hostname = (parsed.hostname or "").lower()
+        if hostname in {"", "localhost", "127.0.0.1"}:
+            return normalized
+
+        query_params = dict(parse_qsl(parsed.query, keep_blank_values=True))
+        query_params.setdefault("sslmode", "require")
+        return urlunsplit(parsed._replace(query=urlencode(query_params)))
 
 
 @lru_cache

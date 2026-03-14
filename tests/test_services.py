@@ -1,5 +1,6 @@
 import json
 
+from app.config import Settings
 from app.models import Job
 from app.services.ai import analyze_resume
 from app.services.ai import clear_job_prep, load_cached_job_prep, store_job_prep
@@ -63,3 +64,18 @@ def test_clear_job_prep_resets_cached_fields():
 
     assert load_cached_job_prep(job) is None
     assert job.prep_generated_at is None
+
+
+def test_database_url_normalization_adds_psycopg_and_ssl_for_hosted_postgres():
+    settings = Settings(database_url="postgresql://user:pass@db.example.com:5432/appdb")
+    assert settings.database_url == "postgresql+psycopg://user:pass@db.example.com:5432/appdb?sslmode=require"
+
+
+def test_database_url_normalization_keeps_local_postgres_without_ssl():
+    settings = Settings(database_url="postgresql://user:pass@localhost:5432/appdb")
+    assert settings.database_url == "postgresql+psycopg://user:pass@localhost:5432/appdb"
+
+
+def test_database_url_normalization_preserves_existing_sslmode():
+    settings = Settings(database_url="postgres://user:pass@db.example.com:5432/appdb?sslmode=verify-full")
+    assert settings.database_url == "postgresql+psycopg://user:pass@db.example.com:5432/appdb?sslmode=verify-full"

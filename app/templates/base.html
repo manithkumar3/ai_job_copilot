@@ -22,11 +22,13 @@
                     <a href="/dashboard" class="{% if active_path == '/dashboard' %}active{% endif %}">Dashboard</a>
                     <a href="/jobs" class="{% if active_path.startswith('/jobs') %}active{% endif %}">Jobs</a>
                     <a href="/resumes" class="{% if active_path.startswith('/resumes') %}active{% endif %}">Resumes</a>
+                    <a href="/mock-interview" class="{% if active_path == '/mock-interview' %}active{% endif %}">Mock Interview</a>
                     <form action="/auth/logout" method="post">
                         <button type="submit" class="ghost-button">Logout</button>
                     </form>
                 {% else %}
                     <a href="/auth/login">Login</a>
+                    <a href="/mock-interview" class="{% if active_path == '/mock-interview' %}active{% endif %}">Upcoming</a>
                     <a href="/auth/register" class="ghost-button">Create account</a>
                 {% endif %}
                 <button type="button" class="theme-toggle" data-theme-toggle>Theme</button>

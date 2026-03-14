@@ -325,6 +325,15 @@ select {
     align-items: center;
 }
 
+.feature-card-highlight {
+    display: grid;
+    gap: 16px;
+    background:
+        radial-gradient(circle at top right, rgba(240, 166, 111, 0.18), transparent 28%),
+        radial-gradient(circle at bottom left, rgba(29, 122, 95, 0.14), transparent 26%),
+        rgba(255, 255, 255, 0.6);
+}
+
 .page-header {
     display: flex;
     justify-content: space-between;
@@ -372,6 +381,38 @@ select {
 
 .muted {
     color: var(--muted);
+}
+
+.upcoming-hero {
+    align-items: stretch;
+}
+
+.mock-preview-card {
+    display: grid;
+    gap: 18px;
+    align-content: start;
+}
+
+.mock-preview-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.mock-badge {
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: var(--secondary);
+    border: 1px solid var(--line);
+    color: var(--text);
+}
+
+.mock-steps {
+    margin: 0;
+    padding-left: 20px;
+    display: grid;
+    gap: 14px;
 }
 
 .panel-soft {

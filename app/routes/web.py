@@ -53,3 +53,10 @@ def dashboard(request: Request, db: Session = Depends(get_db)):
             "today": datetime.now(),
         },
     )
+
+
+@router.get("/mock-interview")
+def mock_interview_preview(request: Request, db: Session = Depends(get_db)):
+    user = get_current_user(request, db)
+    request.state.user = user
+    return render_template(request, "mock_interview.html")

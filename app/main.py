@@ -1,4 +1,5 @@
 from contextlib import asynccontextmanager
+import logging
 from pathlib import Path
 
 from fastapi import FastAPI, Request
@@ -13,9 +14,16 @@ from app.routes.resumes import router as resumes_router
 from app.routes.web import router as web_router
 
 
+logger = logging.getLogger(__name__)
+
+
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
-    init_db()
+    try:
+        init_db()
+    except Exception:
+        logger.exception("Application startup failed while initializing the database.")
+        raise
     yield
 
 

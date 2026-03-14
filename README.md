@@ -39,7 +39,6 @@ scripts/
   seed_data.py
 tests/
 requirements.txt
-.env.example
 docker-compose.yml
 ```
 
@@ -53,10 +52,10 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-2. Copy the environment file and update values as needed.
+2. Create a `.env` file and add your local settings.
 
 ```bash
-cp .env.example .env
+touch .env
 ```
 
 3. Optional: start PostgreSQL if you want to use Docker/Postgres instead of the default SQLite database.
@@ -81,8 +80,6 @@ Open the app at `http://127.0.0.1:8000`.
 
 ## Environment variables
 
-See `.env.example`.
-
 Important values:
 
 - `DATABASE_URL`: Optional database connection string for SQLite or PostgreSQL
@@ -90,6 +87,7 @@ Important values:
 - `OPENAI_API_KEY`: Enables real AI analysis
 - `OPENAI_MODEL`: Model name for resume analysis
 - `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET`: Enable Google login
+- Keep `.env` local only and do not commit real secrets
 
 ## Demo login after seeding
 

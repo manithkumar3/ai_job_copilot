@@ -30,9 +30,6 @@ def list_jobs(
     request: Request,
     q: str = "",
     status: str = "",
-    tag: str = "",
-    location: str = "",
-    company: str = "",
     sort: str = "newest",
     db: Session = Depends(get_db),
 ):
@@ -44,23 +41,24 @@ def list_jobs(
     if q:
         like = f"%{q}%"
         query = query.where(
-            or_(Job.company_name.ilike(like), Job.job_title.ilike(like), Job.job_description.ilike(like), Job.notes.ilike(like))
+            or_(
+                Job.company_name.ilike(like),
+                Job.job_title.ilike(like),
+                Job.job_description.ilike(like),
+                Job.notes.ilike(like),
+                Job.tags.ilike(like),
+                Job.location.ilike(like),
+            )
         )
     if status and status in JobStatus._value2member_map_:
         query = query.where(Job.status == JobStatus(status))
-    if tag:
-        query = query.where(Job.tags.ilike(f"%{tag}%"))
-    if location:
-        query = query.where(Job.location.ilike(f"%{location}%"))
-    if company:
-        query = query.where(Job.company_name.ilike(f"%{company}%"))
 
     if sort == "company":
         query = query.order_by(Job.company_name.asc())
     elif sort == "priority":
-        query = query.order_by(Job.priority.desc(), Job.updated_at.desc())
+        query = query.order_by(Job.priority.desc(), Job.created_at.desc())
     else:
-        query = query.order_by(Job.updated_at.desc())
+        query = query.order_by(Job.created_at.desc())
 
     jobs = db.execute(query).scalars().all()
     resumes = db.execute(select(ResumeVersion).where(ResumeVersion.user_id == user.id).order_by(ResumeVersion.created_at.desc())).scalars().all()
@@ -137,7 +135,6 @@ def save_job(
     experience_level: str = Form(""),
     employment_type: str = Form(""),
     tags: str = Form(""),
-    is_bookmarked: str = Form("off"),
     priority: int = Form(0),
     db: Session = Depends(get_db),
 ):
@@ -164,7 +161,6 @@ def save_job(
         experience_level=experience_level.strip() or None,
         employment_type=employment_type.strip() or None,
         tags=tags.strip() or None,
-        is_bookmarked=is_bookmarked == "on",
         priority=priority,
     )
     db.add(job)
@@ -194,7 +190,6 @@ def update_job(
     experience_level: str = Form(""),
     employment_type: str = Form(""),
     tags: str = Form(""),
-    is_bookmarked: str = Form("off"),
     priority: int = Form(0),
     db: Session = Depends(get_db),
 ):
@@ -222,7 +217,6 @@ def update_job(
     job.experience_level = experience_level.strip() or None
     job.employment_type = employment_type.strip() or None
     job.tags = tags.strip() or None
-    job.is_bookmarked = is_bookmarked == "on"
     job.priority = priority
     db.commit()
     add_activity(db, user.id, "Updated job", f"{job.job_title} at {job.company_name}", job.id)
@@ -266,22 +260,14 @@ def job_detail(request: Request, job_id: int, db: Session = Depends(get_db)):
         {"job": job, "reminders": reminders, "analyses": analyses, "job_prep": job_prep},
     )
 
-
-@router.post("/{job_id}/bookmark")
-def toggle_bookmark(request: Request, job_id: int, db: Session = Depends(get_db)):
-    user, redirect = _require_user(request, db)
-    if redirect:
-        return redirect
-    job = db.get(Job, job_id)
-    if not job or job.user_id != user.id:
-        return RedirectResponse("/jobs", status_code=303)
-    job.is_bookmarked = not job.is_bookmarked
-    db.commit()
-    return RedirectResponse(f"/jobs/{job.id}", status_code=303)
-
-
 @router.post("/{job_id}/status")
-def update_status(request: Request, job_id: int, status: str = Form(...), db: Session = Depends(get_db)):
+def update_status(
+    request: Request,
+    job_id: int,
+    status: str = Form(...),
+    next_url: str = Form(""),
+    db: Session = Depends(get_db),
+):
     user, redirect = _require_user(request, db)
     if redirect:
         return redirect
@@ -294,7 +280,7 @@ def update_status(request: Request, job_id: int, status: str = Form(...), db: Se
     db.commit()
     add_activity(db, user.id, "Updated status", f"{job.job_title} moved to {job.status.value}", job.id)
     flash(request, "Job status updated.", "success")
-    return RedirectResponse(f"/jobs/{job.id}", status_code=303)
+    return RedirectResponse(next_url or f"/jobs/{job.id}", status_code=303)
 
 
 @router.post("/{job_id}/reminders")
@@ -303,6 +289,7 @@ def add_reminder(
     job_id: int,
     remind_at: str = Form(...),
     message: str = Form(...),
+    next_url: str = Form(""),
     db: Session = Depends(get_db),
 ):
     user, redirect = _require_user(request, db)
@@ -321,4 +308,4 @@ def add_reminder(
     db.add(reminder)
     db.commit()
     flash(request, "Reminder added.", "success")
-    return RedirectResponse(f"/jobs/{job.id}", status_code=303)
+    return RedirectResponse(next_url or f"/jobs/{job.id}", status_code=303)

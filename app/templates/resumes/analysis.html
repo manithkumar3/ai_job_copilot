@@ -13,11 +13,11 @@
 </section>
 
 <section class="score-panel">
-    <div class="score-ring" style="background:
-        radial-gradient(circle at center, var(--panel) 52%, transparent 53%),
-        conic-gradient(var(--primary) 0 {{ analysis.match_score }}%, var(--secondary) {{ analysis.match_score }}% 100%);">
-        <strong>{{ analysis.match_score }}%</strong>
-        <span>Match score</span>
+    <div class="score-ring" style="--score: {{ analysis.match_score }}%;">
+        <div class="score-ring-core">
+            <strong>{{ analysis.match_score }}%</strong>
+            <span>Match score</span>
+        </div>
     </div>
     <div>
         <h2>Tailored summary</h2>
@@ -57,7 +57,7 @@
         <div class="panel-head">
             <h2>Requirements not met</h2>
         </div>
-        <ul class="clean-list">
+        <ul class="bullet-list">
             {% for item in analysis.unmet_requirements|nl2list %}
                 <li>{{ item }}</li>
             {% else %}
@@ -69,7 +69,7 @@
         <div class="panel-head">
             <h2>Suggested improvements</h2>
         </div>
-        <ul class="clean-list">
+        <ul class="bullet-list">
             {% for item in analysis.improvements|nl2list %}
                 <li>{{ item }}</li>
             {% endfor %}
@@ -79,7 +79,7 @@
         <div class="panel-head">
             <h2>ATS tips</h2>
         </div>
-        <ul class="clean-list">
+        <ul class="bullet-list">
             {% for item in analysis.ats_tips|nl2list %}
                 <li>{{ item }}</li>
             {% endfor %}

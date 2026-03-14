@@ -39,3 +39,87 @@ if (analysisForm) {
     savedJobSelect?.addEventListener("change", syncAnalysisMode);
     syncAnalysisMode();
 }
+
+const closeModal = (modalId) => {
+    const modal = document.getElementById(modalId);
+    if (!modal) {
+        return;
+    }
+
+    modal.hidden = true;
+    document.body.style.overflow = "";
+};
+
+const openModal = (modalId) => {
+    const modal = document.getElementById(modalId);
+    if (!modal) {
+        return;
+    }
+
+    modal.hidden = false;
+    document.body.style.overflow = "hidden";
+};
+
+document.addEventListener("click", (event) => {
+    const openTrigger = event.target.closest("[data-modal-open]");
+    if (openTrigger) {
+        openModal(openTrigger.dataset.modalOpen);
+        return;
+    }
+
+    const closeTrigger = event.target.closest("[data-modal-close]");
+    if (closeTrigger) {
+        closeModal(closeTrigger.dataset.modalClose);
+    }
+});
+
+document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") {
+        return;
+    }
+
+    document.querySelectorAll(".modal-shell").forEach((modal) => {
+        if (!modal.hidden) {
+            closeModal(modal.id);
+        }
+    });
+});
+
+document.addEventListener("submit", (event) => {
+    const form = event.target;
+    if (!(form instanceof HTMLFormElement)) {
+        return;
+    }
+
+    const lockSubmitControl = (control) => {
+        if (!(control instanceof HTMLButtonElement || control instanceof HTMLInputElement)) {
+            return;
+        }
+
+        if (control.dataset.submitting === "true") {
+            return;
+        }
+
+        control.dataset.submitting = "true";
+        control.disabled = true;
+        control.setAttribute("aria-disabled", "true");
+
+        if (control instanceof HTMLButtonElement) {
+            control.dataset.originalText = control.textContent || "";
+            control.textContent = control.dataset.loadingText || "Please wait...";
+        } else {
+            control.dataset.originalValue = control.value;
+            control.value = control.dataset.loadingText || "Please wait...";
+        }
+    };
+
+    const submitter = event.submitter;
+    if (submitter instanceof HTMLButtonElement || submitter instanceof HTMLInputElement) {
+        lockSubmitControl(submitter);
+        return;
+    }
+
+    form.querySelectorAll('button[type="submit"], input[type="submit"]').forEach((control) => {
+        lockSubmitControl(control);
+    });
+});

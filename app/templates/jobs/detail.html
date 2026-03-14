@@ -5,85 +5,15 @@
     <div>
         <p class="eyebrow">{{ job.company_name }}</p>
         <h1>{{ job.job_title }}</h1>
-        <p class="muted">{{ job.location or 'Location not set' }}</p>
+        <p class="muted">
+            {{ job.location or 'Location not set' }}
+            <span>•</span>
+            {{ job.status.value }}
+        </p>
     </div>
     <div class="header-actions">
         <a href="/jobs/{{ job.id }}/edit" class="secondary-button">Edit</a>
-        <form action="/jobs/{{ job.id }}/bookmark" method="post">
-            <button type="submit" class="ghost-button">{% if job.is_bookmarked %}Remove bookmark{% else %}Bookmark{% endif %}</button>
-        </form>
     </div>
-</section>
-
-<section class="section-grid section-grid-3">
-    <article class="metric-card">
-        <span>Status</span>
-        <strong>{{ job.status.value }}</strong>
-    </article>
-    <article class="metric-card">
-        <span>Resume used</span>
-        <strong>{{ job.resume_version.name if job.resume_version else 'Not linked' }}</strong>
-    </article>
-    <article class="metric-card">
-        <span>Tags</span>
-        <strong>{{ job.tags or 'None' }}</strong>
-    </article>
-</section>
-
-<section class="section-grid section-grid-2">
-    <article class="panel">
-        <div class="panel-head">
-            <h2>Update status</h2>
-        </div>
-        <form action="/jobs/{{ job.id }}/status" method="post" class="inline-form">
-            <select name="status">
-                <option value="Wishlist" {% if job.status.value == 'Wishlist' %}selected{% endif %}>Wishlist</option>
-                <option value="Applied" {% if job.status.value == 'Applied' %}selected{% endif %}>Applied</option>
-                <option value="Interview" {% if job.status.value == 'Interview' %}selected{% endif %}>Interview</option>
-                <option value="Offer" {% if job.status.value == 'Offer' %}selected{% endif %}>Offer</option>
-                <option value="Rejected" {% if job.status.value == 'Rejected' %}selected{% endif %}>Rejected</option>
-            </select>
-            <button type="submit" class="secondary-button">Save</button>
-        </form>
-
-        <div class="spacer-sm"></div>
-        <h3>Job details</h3>
-        <p><strong>Employment:</strong> {{ job.employment_type or 'Not set' }}</p>
-        <p><strong>Experience:</strong> {{ job.experience_level or 'Not set' }}</p>
-        <p><strong>Salary:</strong> {{ job.salary or 'Not set' }}</p>
-        <p><strong>Contact:</strong> {{ job.contact_person or 'Not set' }}</p>
-        <p><strong>Link:</strong> {% if job.job_link %}<a href="{{ job.job_link }}" target="_blank">Open source</a>{% else %}Not added{% endif %}</p>
-        <div class="tag-row">
-            {% for tag in job.tags|split_csv %}
-                <span class="tag">{{ tag }}</span>
-            {% endfor %}
-        </div>
-    </article>
-
-    <article class="panel">
-        <div class="panel-head">
-            <h2>Reminder</h2>
-        </div>
-        <form action="/jobs/{{ job.id }}/reminders" method="post" class="stack-form">
-            <label>Remind at
-                <input type="datetime-local" name="remind_at" required>
-            </label>
-            <label>Message
-                <input type="text" name="message" placeholder="Follow up with recruiter" required>
-            </label>
-            <button type="submit" class="secondary-button">Add reminder</button>
-        </form>
-        <div class="spacer-sm"></div>
-        {% if reminders %}
-            <ul class="clean-list">
-                {% for reminder in reminders %}
-                    <li>{{ reminder.message }} <span class="muted">{{ reminder.remind_at.strftime('%d %b %Y %H:%M') }}</span></li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p class="empty-state">No reminders yet.</p>
-        {% endif %}
-    </article>
 </section>
 
 <section class="section-grid section-grid-2">
@@ -109,36 +39,40 @@
 </section>
 
 <section class="section-grid section-grid-2">
-    <article class="panel">
+    <article class="panel panel-fixed">
         <div class="panel-head">
             <h2>Job description</h2>
         </div>
-        <div class="prose-block">{{ job.job_description }}</div>
-        {% if job.notes %}
-            <div class="spacer-sm"></div>
-            <h3>Notes</h3>
-            <div class="prose-block">{{ job.notes }}</div>
-        {% endif %}
+        <div class="panel-scroll-body">
+            <div class="prose-block">{{ job.job_description }}</div>
+            {% if job.notes %}
+                <div class="spacer-sm"></div>
+                <h3>Notes</h3>
+                <div class="prose-block">{{ job.notes }}</div>
+            {% endif %}
+        </div>
     </article>
 
-    <article class="panel">
+    <article class="panel panel-fixed">
         <div class="panel-head">
             <h2>Resume analyses</h2>
             <span class="muted">Matched to this job</span>
         </div>
-        {% if analyses %}
-            <ul class="analysis-list">
-                {% for analysis in analyses %}
-                    <li>
-                        <span>{{ analysis.resume_version.name }}</span>
-                        <strong>{{ analysis.match_score }}%</strong>
-                        <a href="/resumes/analysis/{{ analysis.id }}">Open</a>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p class="empty-state">No analysis yet. Run one from the resumes page.</p>
-        {% endif %}
+        <div class="panel-scroll-body">
+            {% if analyses %}
+                <ul class="analysis-list">
+                    {% for analysis in analyses %}
+                        <li>
+                            <span>{{ analysis.resume_version.name }}</span>
+                            <strong>{{ analysis.match_score }}%</strong>
+                            <a href="/resumes/analysis/{{ analysis.id }}">Open</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="empty-state">No analysis yet. Run one from the resumes page.</p>
+            {% endif %}
+        </div>
     </article>
 </section>
 {% endblock %}

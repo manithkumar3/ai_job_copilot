@@ -4,7 +4,7 @@
 <section class="page-header">
     <div>
         <p class="eyebrow">Resume manager</p>
-        <h1>Upload, compare, and improve</h1>
+        <h1>Upload, compare, improve</h1>
     </div>
 </section>
 
@@ -68,13 +68,13 @@
                     {% endfor %}
                 </select>
             </label>
-            <p class="muted" data-saved-job-help>Select a saved job to reuse its existing job description and link. You do not need to enter them again.</p>
+            <p class="muted" data-saved-job-help>Pick a saved job to reuse its description and link.</p>
             <div class="stack-form" data-custom-job-fields>
                 <label>Job link
                     <input type="url" name="job_link" placeholder="Optional">
                 </label>
                 <label>Job description
-                    <textarea name="job_description" rows="10" placeholder="Paste a custom job description only if you are not choosing a saved job"></textarea>
+                    <textarea name="job_description" rows="10" placeholder="Paste a custom job description if you are not using a saved job"></textarea>
                 </label>
             </div>
             <button type="submit" class="secondary-button">Analyze resume</button>
@@ -111,7 +111,7 @@
             </ul>
         </div>
     {% else %}
-        <p class="empty-state">Your analysis history will appear here.</p>
+        <p class="empty-state">Your analyses will appear here.</p>
     {% endif %}
 </section>
 {% endblock %}

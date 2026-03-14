@@ -8,6 +8,7 @@
     </div>
 </section>
 
+{% if not job %}
 <section class="section-grid section-grid-2">
     <article class="panel">
         <div class="panel-head">
@@ -43,6 +44,7 @@
         {% endif %}
     </article>
 </section>
+{% endif %}
 
 <section class="panel">
     <form action="{% if job %}/jobs/{{ job.id }}/update{% else %}/jobs/save{% endif %}" method="post" class="stack-form">
@@ -101,10 +103,6 @@
         </label>
         <label>Tags
             <input type="text" name="tags" value="{{ job.tags if job else '' }}" placeholder="Remote, Dream Company, Urgent">
-        </label>
-        <label class="checkbox-line">
-            <input type="checkbox" name="is_bookmarked" {% if job and job.is_bookmarked %}checked{% endif %}>
-            Bookmark this job
         </label>
         <label>Job description
             <textarea name="job_description" rows="14" required>{{ prefill.get('job_description', job.job_description if job else '') }}</textarea>

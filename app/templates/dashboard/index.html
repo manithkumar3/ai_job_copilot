@@ -5,7 +5,7 @@
     <div class="dashboard-hero-copy">
         <p class="eyebrow">Dashboard</p>
         <h1>Hello {{ current_user.full_name.split(' ')[0] }}.</h1>
-        <p class="dashboard-subtext">A calm snapshot of your pipeline, follow-ups, and resume progress.</p>
+        <p class="dashboard-subtext">Your pipeline, reminders, and resume progress at a glance.</p>
         <div class="dashboard-mini-stats">
             <span><strong>{{ metrics.total_jobs }}</strong> tracked jobs</span>
             <span><strong>{{ metrics.applications_sent }}</strong> active applications</span>
@@ -17,13 +17,13 @@
             <p class="eyebrow">Today’s focus</p>
             {% if metrics.no_response_alerts %}
                 <h2>Follow up on older applications.</h2>
-                <p class="muted">{{ metrics.no_response_alerts|length }} application{% if metrics.no_response_alerts|length != 1 %}s{% endif %} may need a check-in.</p>
+                <p class="muted">{{ metrics.no_response_alerts|length }} need attention.</p>
             {% elif metrics.due_reminders %}
                 <h2>You have reminders waiting.</h2>
-                <p class="muted">Stay on top of recruiter follow-ups and interview prep.</p>
+                <p class="muted">Review them and keep things moving.</p>
             {% else %}
                 <h2>Your pipeline looks under control.</h2>
-                <p class="muted">Add a new role or run an AI analysis to keep momentum going.</p>
+                <p class="muted">Add a role or run an analysis.</p>
             {% endif %}
         </div>
         <div class="dashboard-actions">
@@ -73,7 +73,7 @@
                 {% endfor %}
             </div>
         {% else %}
-            <p class="empty-state">No jobs yet. Save a few roles to start building your pipeline.</p>
+            <p class="empty-state">No jobs yet. Add a role to get started.</p>
         {% endif %}
     </article>
 
@@ -92,7 +92,7 @@
                 {% endfor %}
             </ul>
         {% else %}
-            <p class="empty-state">Your activity feed will appear here after you upload resumes or save jobs.</p>
+            <p class="empty-state">Recent updates will show here.</p>
         {% endif %}
     </article>
 </section>
@@ -139,71 +139,9 @@
                 {% endfor %}
             </ul>
         {% else %}
-            <p class="empty-state">Upload your first resume to unlock AI analysis.</p>
+            <p class="empty-state">Upload your first resume to get started.</p>
         {% endif %}
     </article>
 </section>
 
-<section class="section-grid section-grid-2">
-    <article class="panel panel-soft">
-        <div class="panel-head">
-            <h2>AI job insights</h2>
-            <span class="muted">{% if latest_resume %}Based on {{ latest_resume.name }}{% else %}Add a resume first{% endif %}</span>
-        </div>
-        <div class="insight-block">
-            <h3>Best matching jobs</h3>
-            {% if insights.best_matching_jobs %}
-                <ul class="clean-list clean-list-compact">
-                    {% for item in insights.best_matching_jobs %}
-                        <li>{{ item.title }} at {{ item.company }} <strong>{{ item.score }}%</strong></li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p class="empty-state">Save jobs and upload a resume to see matching opportunities.</p>
-            {% endif %}
-        </div>
-        <div class="insight-block">
-            <h3>Skills to learn</h3>
-            {% if insights.skills_to_learn %}
-                <div class="tag-row">
-                    {% for skill in insights.skills_to_learn %}
-                        <span class="tag">{{ skill }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <p class="empty-state">No strong skill gaps detected yet.</p>
-            {% endif %}
-        </div>
-    </article>
-
-    <article class="panel panel-soft">
-        <div class="panel-head">
-            <h2>Targeting suggestions</h2>
-        </div>
-        <div class="insight-block">
-            <h3>Role trends</h3>
-            {% if insights.role_trends %}
-                <ul class="clean-list clean-list-compact">
-                    {% for trend in insights.role_trends %}
-                        <li>{{ trend }}</li>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p class="empty-state">Save a few roles to surface patterns.</p>
-            {% endif %}
-        </div>
-        <div class="insight-block">
-            <h3>Suggested job titles</h3>
-            {% if insights.suggested_titles %}
-                <div class="tag-row">
-                    {% for title in insights.suggested_titles %}
-                        <span class="tag">{{ title }}</span>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <p class="empty-state">No title suggestions yet.</p>
-            {% endif %}
-        </div>
-    </article>
-</section>
 {% endblock %}

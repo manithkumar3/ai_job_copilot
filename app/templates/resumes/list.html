@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}Resumes | AI Job Copilot{% endblock %}
+{% block content %}
+<section class="page-header">
+    <div>
+        <p class="eyebrow">Resume manager</p>
+        <h1>Upload, compare, and improve</h1>
+    </div>
+</section>
+
+<section class="resumes-workspace">
+    <div class="resumes-left-column">
+        <article class="panel">
+            <div class="panel-head">
+                <h2>Upload new version</h2>
+            </div>
+            <form action="/resumes/upload" method="post" enctype="multipart/form-data" class="stack-form">
+                <label>Resume name
+                    <input type="text" name="name" placeholder="Backend Resume v2" required>
+                </label>
+                <label>Resume file
+                    <input type="file" name="resume_file" accept=".pdf,.docx,.txt,.md" required>
+                </label>
+                <button type="submit" class="primary-button">Upload resume</button>
+            </form>
+        </article>
+
+        <article class="panel">
+            <div class="panel-head">
+                <h2>Saved resume versions</h2>
+            </div>
+            {% if resumes %}
+                <ul class="resume-list">
+                    {% for resume in resumes %}
+                        <li>
+                            <div>
+                                <strong>{{ resume.name }}</strong>
+                                <span class="muted">{{ resume.source_filename }}</span>
+                            </div>
+                            <a href="/resumes/{{ resume.id }}/download">Download</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="empty-state">Upload your first resume to begin.</p>
+            {% endif %}
+        </article>
+    </div>
+
+    <article class="panel resumes-analysis-panel">
+        <div class="panel-head">
+            <h2>Run AI analysis</h2>
+        </div>
+        <form action="/resumes/analyze" method="post" class="stack-form" data-analysis-form>
+            <label>Resume version
+                <select name="resume_version_id" required>
+                    <option value="">Select a resume</option>
+                    {% for resume in resumes %}
+                        <option value="{{ resume.id }}">{{ resume.name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>Saved job
+                <select name="job_id" data-saved-job-select>
+                    <option value="">Use custom job description instead</option>
+                    {% for job in jobs %}
+                        <option value="{{ job.id }}">{{ job.company_name }} - {{ job.job_title }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <p class="muted" data-saved-job-help>Select a saved job to reuse its existing job description and link. You do not need to enter them again.</p>
+            <div class="stack-form" data-custom-job-fields>
+                <label>Job link
+                    <input type="url" name="job_link" placeholder="Optional">
+                </label>
+                <label>Job description
+                    <textarea name="job_description" rows="10" placeholder="Paste a custom job description only if you are not choosing a saved job"></textarea>
+                </label>
+            </div>
+            <button type="submit" class="secondary-button">Analyze resume</button>
+        </form>
+    </article>
+</section>
+
+<section class="panel resumes-history-panel">
+    <div class="panel-head">
+        <h2>Recent analyses</h2>
+    </div>
+    {% if analyses %}
+        <div class="analysis-table">
+            <div class="analysis-table-head">
+                <span>Resume version</span>
+                <span>Saved job</span>
+                <span>Match score</span>
+                <span>Improve</span>
+            </div>
+            <ul class="analysis-list analysis-list-table">
+                {% for analysis in analyses %}
+                    <li>
+                        <span>{{ analysis.resume_version.name }}</span>
+                        <span>{{ analysis.job.company_name ~ ' - ' ~ analysis.job.job_title if analysis.job else 'Custom job description' }}</span>
+                        <strong>{{ analysis.match_score }}%</strong>
+                        <a href="/resumes/analysis/{{ analysis.id }}" class="inline-icon-link">
+                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" class="inline-icon">
+                                <path d="M1.5 12s3.8-6.5 10.5-6.5S22.5 12 22.5 12 18.7 18.5 12 18.5 1.5 12 1.5 12Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+                                <circle cx="12" cy="12" r="3.25" fill="none" stroke="currentColor" stroke-width="1.7"/>
+                            </svg>
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% else %}
+        <p class="empty-state">Your analysis history will appear here.</p>
+    {% endif %}
+</section>
+{% endblock %}

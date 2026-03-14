@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Register | AI Job Copilot{% endblock %}
+{% block content %}
+<section class="auth-layout">
+    <div class="auth-copy">
+        <p class="eyebrow">Create your workspace</p>
+        <h1>Start organizing your job search today.</h1>
+        <p>Upload your current resume, save your first jobs, and let the app recommend what to improve next.</p>
+    </div>
+    <div class="panel form-panel">
+        <h2>Create account</h2>
+        <form action="/auth/register" method="post" class="stack-form">
+            <label>Full name
+                <input type="text" name="full_name" placeholder="Your name" required>
+            </label>
+            <label>Email
+                <input type="email" name="email" placeholder="you@example.com" required>
+            </label>
+            <label>Password
+                <input type="password" name="password" placeholder="Create a password" required>
+            </label>
+            <button type="submit" class="primary-button full-width">Create account</button>
+        </form>
+        <a href="/auth/google" class="secondary-button full-width center">Sign up with Google</a>
+        <p class="muted center">Already have an account? <a href="/auth/login">Login</a></p>
+    </div>
+</section>
+{% endblock %}

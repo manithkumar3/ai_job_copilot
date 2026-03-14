@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}Jobs | AI Job Copilot{% endblock %}
+{% block content %}
+<section class="page-header">
+    <div>
+        <p class="eyebrow">Job tracker</p>
+        <h1>Applications and wishlist</h1>
+    </div>
+    <div class="header-actions">
+        <a href="/jobs/new" class="primary-button">Add job</a>
+    </div>
+</section>
+
+<section class="panel">
+    <form method="get" action="/jobs" class="filter-grid">
+        <input type="text" name="q" placeholder="Search company, title, description" value="{{ request.query_params.get('q', '') }}">
+        <select name="status">
+            <option value="">All statuses</option>
+            {% for item in statuses %}
+                <option value="{{ item.value }}" {% if request.query_params.get('status', '') == item.value %}selected{% endif %}>{{ item.value }}</option>
+            {% endfor %}
+        </select>
+        <input type="text" name="tag" placeholder="Tag" value="{{ request.query_params.get('tag', '') }}">
+        <input type="text" name="location" placeholder="Location" value="{{ request.query_params.get('location', '') }}">
+        <input type="text" name="company" placeholder="Company" value="{{ request.query_params.get('company', '') }}">
+        <select name="sort">
+            <option value="newest" {% if request.query_params.get('sort', 'newest') == 'newest' %}selected{% endif %}>Newest</option>
+            <option value="company" {% if request.query_params.get('sort', '') == 'company' %}selected{% endif %}>Company</option>
+            <option value="priority" {% if request.query_params.get('sort', '') == 'priority' %}selected{% endif %}>Priority</option>
+        </select>
+        <div class="filter-actions">
+            <button type="submit" class="secondary-button">Apply filters</button>
+            <a href="/jobs" class="ghost-button center">Clear filters</a>
+        </div>
+    </form>
+</section>
+
+<section class="job-grid">
+    {% for job in jobs %}
+        <article class="job-card">
+            <div class="job-card-head">
+                <div>
+                    <p class="job-company">{{ job.company_name }}</p>
+                    <h2><a href="/jobs/{{ job.id }}">{{ job.job_title }}</a></h2>
+                </div>
+                <span class="status-pill status-{{ job.status.value|lower }}">{{ job.status.value }}</span>
+            </div>
+            <p class="muted">{{ job.location or 'Location not added' }}</p>
+            <p>{{ (job.job_description[:180] ~ '...') if job.job_description|length > 180 else job.job_description }}</p>
+            <div class="tag-row">
+                {% for tag in job.tags|split_csv %}
+                    <span class="tag">{{ tag }}</span>
+                {% endfor %}
+            </div>
+            <div class="job-actions">
+                <a href="/jobs/{{ job.id }}" class="secondary-button">Open</a>
+                <a href="/jobs/{{ job.id }}/edit" class="ghost-button">Edit</a>
+            </div>
+        </article>
+    {% else %}
+        <article class="panel empty-panel">
+            <h2>No jobs yet</h2>
+            <p>Start with a wishlist role or paste a job description to pre-fill the form.</p>
+            <a href="/jobs/new" class="primary-button">Add your first job</a>
+        </article>
+    {% endfor %}
+</section>
+{% endblock %}

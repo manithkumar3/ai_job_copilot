@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}AI Job Copilot{% endblock %}
+{% block content %}
+<section class="hero">
+    <div class="hero-copy">
+        <p class="eyebrow">AI-powered job search workspace</p>
+        <h1>Turn scattered job hunting into one focused system.</h1>
+        <p class="hero-text">
+            Upload your resume, compare it with job descriptions, track every application, and get AI suggestions
+            that help you apply with more confidence.
+        </p>
+        <div class="hero-actions">
+            <a href="/auth/register" class="primary-button">Start free</a>
+            <a href="/auth/login" class="secondary-button">See dashboard</a>
+        </div>
+        <div class="hero-points">
+            <span>Resume match scoring</span>
+            <span>Job tracker + reminders</span>
+            <span>Simple dashboard analytics</span>
+        </div>
+    </div>
+
+    <div class="hero-card">
+        <div class="metric-orb">
+            <strong>84%</strong>
+            <span>Resume match</span>
+        </div>
+        <div class="glass-panel">
+            <h3>What AI helps with</h3>
+            <ul class="clean-list">
+                <li>Find missing skills and keywords</li>
+                <li>Rewrite your summary for the role</li>
+                <li>Suggest the best resume version for each job</li>
+                <li>Highlight follow-up gaps before opportunities go cold</li>
+            </ul>
+        </div>
+        <div class="hero-strip">
+            <span>Wishlist</span>
+            <span>Applied</span>
+            <span>Interview</span>
+            <span>Offer</span>
+        </div>
+    </div>
+</section>
+
+<section class="section-grid section-grid-3">
+    <article class="feature-card">
+        <h3>Analyze any resume against any job</h3>
+        <p>Upload PDF or DOCX resumes, paste a description or link, and get a match score with practical fixes.</p>
+    </article>
+    <article class="feature-card">
+        <h3>Track every application in one place</h3>
+        <p>Save jobs, bookmark dream roles, add reminders, and keep notes tied to the resume version you used.</p>
+    </article>
+    <article class="feature-card">
+        <h3>See what to improve next</h3>
+        <p>Use dashboard insights to spot skill gaps, common role patterns, and the job titles you should target.</p>
+    </article>
+</section>
+
+<section class="landing-band">
+    <div>
+        <p class="eyebrow">Built for simplicity</p>
+        <h2>Polished where it matters, quiet where it should be.</h2>
+    </div>
+    <p>
+        The landing page is designed to feel premium. Once you sign in, the product stays minimal and practical so
+        job searching feels manageable, not overwhelming.
+    </p>
+</section>
+{% endblock %}

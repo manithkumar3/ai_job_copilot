@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}{% if job %}Edit job{% else %}New job{% endif %} | AI Job Copilot{% endblock %}
+{% block content %}
+<section class="page-header">
+    <div>
+        <p class="eyebrow">Job form</p>
+        <h1>{% if job %}Edit job{% else %}Save a job{% endif %}</h1>
+    </div>
+</section>
+
+<section class="section-grid section-grid-2">
+    <article class="panel">
+        <div class="panel-head">
+            <h2>Quick extraction</h2>
+            <span class="muted">Paste a JD or a link</span>
+        </div>
+        <form action="/jobs/extract" method="post" class="stack-form">
+            <label>Job link
+                <input type="url" name="job_link" placeholder="https://company.com/jobs/123">
+            </label>
+            <label>Job description
+                <textarea name="job_description" rows="10" placeholder="Paste the full job description here"></textarea>
+            </label>
+            <button type="submit" class="secondary-button">Extract details</button>
+        </form>
+    </article>
+
+    <article class="panel">
+        <div class="panel-head">
+            <h2>Resume suggestion</h2>
+            <span class="muted">Based on your saved resumes</span>
+        </div>
+        {% if resume_scores %}
+            <ul class="clean-list">
+                {% for score in resume_scores %}
+                    <li>{{ score.name }} <strong>{{ score.score }}%</strong></li>
+                {% endfor %}
+            </ul>
+        {% elif resumes %}
+            <p class="empty-state">Upload a resume to get best-version recommendations for each job.</p>
+        {% else %}
+            <p class="empty-state">No resumes saved yet.</p>
+        {% endif %}
+    </article>
+</section>
+
+<section class="panel">
+    <form action="{% if job %}/jobs/{{ job.id }}/update{% else %}/jobs/save{% endif %}" method="post" class="stack-form">
+        <div class="form-grid">
+            <label>Company name
+                <input type="text" name="company_name" value="{{ prefill.get('company_name', job.company_name if job else '') }}" required>
+            </label>
+            <label>Job title
+                <input type="text" name="job_title" value="{{ prefill.get('job_title', job.job_title if job else '') }}" required>
+            </label>
+            <label>Location
+                <input type="text" name="location" value="{{ prefill.get('location', job.location if job else '') }}">
+            </label>
+            <label>Salary
+                <input type="text" name="salary" value="{{ job.salary if job else '' }}">
+            </label>
+            <label>Job link
+                <input type="url" name="job_link" value="{{ prefill.get('job_link', job.job_link if job else '') }}">
+            </label>
+            <label>Status
+                <select name="status">
+                    {% set selected_status = job.status.value if job else 'Wishlist' %}
+                    {% for item in statuses %}
+                        <option value="{{ item.value }}" {% if item.value == selected_status %}selected{% endif %}>{{ item.value }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>Experience level
+                <input type="text" name="experience_level" value="{{ prefill.get('experience_level', job.experience_level if job else '') }}">
+            </label>
+            <label>Employment type
+                <input type="text" name="employment_type" value="{{ prefill.get('employment_type', job.employment_type if job else '') }}">
+            </label>
+            <label>Date applied
+                <input type="date" name="date_applied" value="{{ job.date_applied.isoformat() if job and job.date_applied else '' }}">
+            </label>
+            <label>Contact person
+                <input type="text" name="contact_person" value="{{ job.contact_person if job else '' }}">
+            </label>
+            <label>Resume version used
+                <select name="resume_version_id">
+                    <option value="">None</option>
+                    {% for resume in resumes %}
+                        {% set candidate_resume = job.resume_version_id if job else suggested_resume_id %}
+                        <option value="{{ resume.id }}" {% if candidate_resume == resume.id %}selected{% endif %}>{{ resume.name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>Priority
+                <input type="number" name="priority" min="0" max="5" value="{{ job.priority if job else 0 }}">
+            </label>
+        </div>
+
+        <label>Required skills
+            <input type="text" name="required_skills" value="{{ prefill.get('required_skills', job.required_skills if job else '') }}" placeholder="Python, FastAPI, PostgreSQL">
+        </label>
+        <label>Tags
+            <input type="text" name="tags" value="{{ job.tags if job else '' }}" placeholder="Remote, Dream Company, Urgent">
+        </label>
+        <label class="checkbox-line">
+            <input type="checkbox" name="is_bookmarked" {% if job and job.is_bookmarked %}checked{% endif %}>
+            Bookmark this job
+        </label>
+        <label>Job description
+            <textarea name="job_description" rows="14" required>{{ prefill.get('job_description', job.job_description if job else '') }}</textarea>
+        </label>
+        <label>Notes
+            <textarea name="notes" rows="6">{{ job.notes if job else '' }}</textarea>
+        </label>
+        <button type="submit" class="primary-button">{% if job %}Update job{% else %}Save job{% endif %}</button>
+    </form>
+</section>
+{% endblock %}

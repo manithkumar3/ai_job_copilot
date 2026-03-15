@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}AI Job Copilot{% endblock %}</title>
-    <link rel="stylesheet" href="/static/css/app.css">
+    <link rel="stylesheet" href="/static/css/app.css?v=20260315-desktop-nav-fix2">
 </head>
 <body>
     <div class="site-shell">
@@ -17,22 +17,63 @@
                 </span>
             </a>
 
-            <nav class="nav">
+            <button
+                type="button"
+                class="nav-toggle"
+                data-nav-toggle
+                aria-expanded="false"
+                aria-controls="site-nav"
+                aria-label="Toggle navigation"
+            >
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <nav class="nav" id="site-nav" data-nav-menu>
+                <div class="nav-panel-head">
+                    <div>
+                        <p class="nav-panel-kicker">Quick access</p>
+                        <h2 class="nav-panel-title">Navigation</h2>
+                        <p class="nav-panel-copy">Move around the app faster.</p>
+                    </div>
+                    <button
+                        type="button"
+                        class="nav-panel-close"
+                        data-nav-close
+                        aria-label="Close navigation"
+                    >
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+
+                <div class="nav-panel-group">
                 {% if current_user %}
-                    <a href="/dashboard" class="{% if active_path == '/dashboard' %}active{% endif %}">Dashboard</a>
-                    <a href="/jobs" class="{% if active_path.startswith('/jobs') %}active{% endif %}">Jobs</a>
-                    <a href="/resumes" class="{% if active_path.startswith('/resumes') %}active{% endif %}">Resumes</a>
-                    <a href="/mock-interview" class="{% if active_path == '/mock-interview' %}active{% endif %}">Mock Interview</a>
+                    <a href="/dashboard" class="nav-link {% if active_path == '/dashboard' %}active{% endif %}">Dashboard</a>
+                    <a href="/jobs" class="nav-link {% if active_path.startswith('/jobs') %}active{% endif %}">Jobs</a>
+                    <a href="/resumes" class="nav-link {% if active_path.startswith('/resumes') %}active{% endif %}">Resumes</a>
+                    <a href="/mock-interview" class="nav-link {% if active_path == '/mock-interview' %}active{% endif %}">Mock Interview</a>
                     <form action="/auth/logout" method="post">
-                        <button type="submit" class="ghost-button">Logout</button>
+                        <button type="submit" class="ghost-button nav-action">Logout</button>
                     </form>
                 {% else %}
-                    <a href="/auth/login">Login</a>
-                    <a href="/mock-interview" class="{% if active_path == '/mock-interview' %}active{% endif %}">Upcoming</a>
-                    <a href="/auth/register" class="ghost-button">Create account</a>
+                    <a href="/auth/login" class="nav-link">Login</a>
+                    <a href="/mock-interview" class="nav-link {% if active_path == '/mock-interview' %}active{% endif %}">Upcoming</a>
+                    <a href="/auth/register" class="ghost-button nav-action">Create account</a>
                 {% endif %}
-                <button type="button" class="theme-toggle" data-theme-toggle>Theme</button>
+                </div>
+
+                <div class="nav-panel-footer">
+                    <button type="button" class="theme-toggle nav-action" data-theme-toggle>Theme</button>
+                </div>
             </nav>
+            <button
+                type="button"
+                class="nav-backdrop"
+                data-nav-close
+                aria-label="Close navigation"
+            ></button>
         </header>
 
         {% if flashes %}
@@ -48,6 +89,6 @@
         </main>
     </div>
 
-    <script src="/static/js/app.js"></script>
+    <script src="/static/js/app.js?v=20260315-desktop-nav-fix2"></script>
 </body>
 </html>

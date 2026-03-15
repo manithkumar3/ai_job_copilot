@@ -1,6 +1,11 @@
 const root = document.documentElement;
 const toggle = document.querySelector("[data-theme-toggle]");
+const navToggle = document.querySelector("[data-nav-toggle]");
+const navMenu = document.querySelector("[data-nav-menu]");
+const navCloseControls = document.querySelectorAll("[data-nav-close]");
+const navBackdrop = document.querySelector(".nav-backdrop");
 const savedTheme = localStorage.getItem("aijobcopilot-theme");
+const mobileNavBreakpoint = window.matchMedia("(max-width: 960px)");
 
 if (savedTheme) {
     root.setAttribute("data-theme", savedTheme);
@@ -12,6 +17,46 @@ if (toggle) {
         root.setAttribute("data-theme", nextTheme);
         localStorage.setItem("aijobcopilot-theme", nextTheme);
     });
+}
+
+if (navToggle && navMenu) {
+    const closeMobileNav = () => {
+        navMenu.classList.remove("nav-open");
+        navBackdrop?.classList.remove("nav-backdrop-open");
+        navToggle.setAttribute("aria-expanded", "false");
+        document.body.style.overflow = "";
+    };
+
+    const syncMobileNav = () => {
+        closeMobileNav();
+    };
+
+    navToggle.addEventListener("click", () => {
+        if (!mobileNavBreakpoint.matches) {
+            return;
+        }
+
+        const isOpen = navMenu.classList.toggle("nav-open");
+        navBackdrop?.classList.toggle("nav-backdrop-open", isOpen);
+        navToggle.setAttribute("aria-expanded", String(isOpen));
+        document.body.style.overflow = isOpen ? "hidden" : "";
+    });
+
+    navMenu.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+            if (!mobileNavBreakpoint.matches) {
+                return;
+            }
+
+            closeMobileNav();
+        });
+    });
+
+    navCloseControls.forEach((control) => {
+        control.addEventListener("click", closeMobileNav);
+    });
+    mobileNavBreakpoint.addEventListener("change", syncMobileNav);
+    syncMobileNav();
 }
 
 const analysisForm = document.querySelector("[data-analysis-form]");
@@ -76,6 +121,13 @@ document.addEventListener("click", (event) => {
 document.addEventListener("keydown", (event) => {
     if (event.key !== "Escape") {
         return;
+    }
+
+    if (navToggle?.getAttribute("aria-expanded") === "true") {
+        navMenu?.classList.remove("nav-open");
+        navBackdrop?.classList.remove("nav-backdrop-open");
+        navToggle.setAttribute("aria-expanded", "false");
+        document.body.style.overflow = "";
     }
 
     document.querySelectorAll(".modal-shell").forEach((modal) => {

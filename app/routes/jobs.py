@@ -309,3 +309,29 @@ def add_reminder(
     db.commit()
     flash(request, "Reminder added.", "success")
     return RedirectResponse(next_url or f"/jobs/{job.id}", status_code=303)
+
+
+@router.post("/{job_id}/reminders/{reminder_id}/delete")
+def delete_reminder(
+    request: Request,
+    job_id: int,
+    reminder_id: int,
+    next_url: str = Form(""),
+    db: Session = Depends(get_db),
+):
+    user, redirect = _require_user(request, db)
+    if redirect:
+        return redirect
+
+    job = db.get(Job, job_id)
+    reminder = db.get(Reminder, reminder_id)
+    if not job or job.user_id != user.id or not reminder or reminder.user_id != user.id or reminder.job_id != job.id:
+        flash(request, "Reminder not found.", "error")
+        return RedirectResponse(next_url or "/dashboard", status_code=303)
+
+    message = reminder.message
+    db.delete(reminder)
+    db.commit()
+    add_activity(db, user.id, "Deleted reminder", f"Removed reminder for {job.job_title}: {message}", job.id)
+    flash(request, "Reminder deleted.", "success")
+    return RedirectResponse(next_url or f"/jobs/{job.id}", status_code=303)

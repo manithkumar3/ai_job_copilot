@@ -4,7 +4,14 @@
 <section class="dashboard-hero">
     <div class="dashboard-hero-copy">
         <p class="eyebrow">Dashboard</p>
-        <h1>Hello {{ current_user.full_name.split(' ')[0] }}.</h1>
+        <h1 class="dashboard-heading-inline">
+            Hello {{ current_user.full_name.split(' ')[0] }}.
+            <span class="dashboard-heading-icon dashboard-heading-icon-lg" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                </svg>
+            </span>
+        </h1>
         <p class="dashboard-subtext">Your pipeline, reminders, and resume progress at a glance.</p>
         <div class="dashboard-mini-stats">
             <span><strong>{{ metrics.total_jobs }}</strong> tracked jobs</span>
@@ -16,14 +23,35 @@
         <div class="dashboard-focus-card">
             <p class="eyebrow">Today’s focus</p>
             {% if metrics.no_response_alerts %}
-                <h2>Follow up on older applications.</h2>
-                <p class="muted">{{ metrics.no_response_alerts|length }} need attention.</p>
+                <h2 class="dashboard-heading-inline">
+                    Every application is a step closer to the right yes.
+                    <span class="dashboard-heading-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M12 8v5m0 3h.01M10.29 3.86 1.82 18A2 2 0 0 0 3.53 21h16.94A2 2 0 0 0 22.18 18L13.71 3.86a2 2 0 0 0-3.42 0Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                </h2>
+                <p class="muted">{{ metrics.no_response_alerts|length }} roles are ready for a follow-up.</p>
             {% elif metrics.due_reminders %}
-                <h2>You have reminders waiting.</h2>
-                <p class="muted">Review them and keep things moving.</p>
+                <h2 class="dashboard-heading-inline">
+                    Consistency turns applications into opportunities.
+                    <span class="dashboard-heading-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.17V11a6 6 0 1 0-12 0v3.17c0 .53-.21 1.04-.59 1.42L4 17h5m6 0a3 3 0 1 1-6 0m6 0H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                </h2>
+                <p class="muted">You have reminders waiting. Keep the momentum going.</p>
             {% else %}
-                <h2>Your pipeline looks under control.</h2>
-                <p class="muted">Add a role or run an analysis.</p>
+                <h2 class="dashboard-heading-inline">
+                    Small actions each day build a stronger pipeline.
+                    <span class="dashboard-heading-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" fill="none">
+                            <path d="M4 16 10 10l4 4 6-8M20 20H4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </span>
+                </h2>
+                <p class="muted">Your dashboard is in a good spot. Add a role or run an analysis next.</p>
             {% endif %}
         </div>
         <div class="dashboard-actions">
@@ -35,31 +63,149 @@
 
 <section class="metrics-grid">
     <article class="metric-card metric-card-accent">
-        <span>Total jobs</span>
+        <span class="dashboard-heading-inline metric-label-with-icon">
+            Total jobs
+            <span class="dashboard-heading-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M7 7V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2m-13 4h16v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8Zm0 0h16V9a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v2Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                </svg>
+            </span>
+        </span>
         <strong>{{ metrics.total_jobs }}</strong>
         <small>{{ metrics.status_counts.get('Wishlist', 0) }} in wishlist</small>
     </article>
     <article class="metric-card">
-        <span>Applications</span>
+        <span class="dashboard-heading-inline metric-label-with-icon">
+            Applications
+            <span class="dashboard-heading-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M21 3 10 14m11-11-7 18-4-7-7-4 18-7Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+        </span>
         <strong>{{ metrics.applications_sent }}</strong>
         <small>{{ metrics.status_counts.get('Applied', 0) }} currently applied</small>
     </article>
     <article class="metric-card">
-        <span>Interview rate</span>
+        <span class="dashboard-heading-inline metric-label-with-icon">
+            Interview rate
+            <span class="dashboard-heading-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M12 20v-6m0 0 4-4m-4 4-4-4M4 6h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+        </span>
         <strong>{{ metrics.interview_rate }}%</strong>
         <small>{{ metrics.status_counts.get('Interview', 0) }} interview stage</small>
     </article>
     <article class="metric-card">
-        <span>Offer rate</span>
+        <span class="dashboard-heading-inline metric-label-with-icon">
+            Offer rate
+            <span class="dashboard-heading-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                    <path d="m8 12 2.5 2.5L16 9m4 3a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </span>
+        </span>
         <strong>{{ metrics.offer_rate }}%</strong>
         <small>{{ metrics.status_counts.get('Offer', 0) }} offers</small>
+    </article>
+</section>
+
+<section class="section-grid section-grid-3 dashboard-charts">
+    <article class="panel panel-soft chart-card">
+        <div class="panel-head">
+            <h2 class="dashboard-heading-inline">
+                Status breakdown
+                <span class="dashboard-heading-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M12 3a9 9 0 1 0 9 9h-9V3Zm2 0a9 9 0 0 1 7 7h-7V3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+            </h2>
+            <span class="muted">Current pipeline</span>
+        </div>
+        <div class="chart-donut-layout">
+            <div class="chart-donut" style="--chart-fill: conic-gradient({{ metrics.status_chart.gradient }});">
+                <div>
+                    <strong>{{ metrics.total_jobs }}</strong>
+                    <span>Total roles</span>
+                </div>
+            </div>
+            <ul class="chart-legend">
+                {% for item in metrics.status_chart.legend %}
+                    <li>
+                        <span class="chart-legend-swatch" style="background: {{ item.color }};"></span>
+                        <span>{{ item.label }}</span>
+                        <strong>{{ item.count }}</strong>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </article>
+
+    <article class="panel panel-soft chart-card">
+        <div class="panel-head">
+            <h2 class="dashboard-heading-inline">
+                Applications by week
+                <span class="dashboard-heading-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M5 19V9m7 10V5m7 14v-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                </span>
+            </h2>
+            <span class="muted">{{ metrics.applications_series.total }} in the last 6 weeks</span>
+        </div>
+        <div class="chart-bars">
+            {% for point in metrics.applications_series.points %}
+                <div class="chart-bar-column">
+                    <span class="chart-bar-number">{{ point.value }}</span>
+                    <div class="chart-bar-track">
+                        <span class="chart-bar-fill chart-bar-fill-primary" style="height: {{ point.height }}%;"></span>
+                    </div>
+                    <span class="chart-bar-label">{{ point.label }}</span>
+                </div>
+            {% endfor %}
+        </div>
+    </article>
+
+    <article class="panel panel-soft chart-card">
+        <div class="panel-head">
+            <h2 class="dashboard-heading-inline">
+                Jobs added by week
+                <span class="dashboard-heading-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                </span>
+            </h2>
+            <span class="muted">{{ metrics.jobs_added_series.total }} added in the last 6 weeks</span>
+        </div>
+        <div class="chart-bars">
+            {% for point in metrics.jobs_added_series.points %}
+                <div class="chart-bar-column">
+                    <span class="chart-bar-number">{{ point.value }}</span>
+                    <div class="chart-bar-track">
+                        <span class="chart-bar-fill chart-bar-fill-warm" style="height: {{ point.height }}%;"></span>
+                    </div>
+                    <span class="chart-bar-label">{{ point.label }}</span>
+                </div>
+            {% endfor %}
+        </div>
     </article>
 </section>
 
 <section class="section-grid section-grid-2">
     <article class="panel panel-soft panel-compact">
         <div class="panel-head">
-            <h2>Status distribution</h2>
+            <h2 class="dashboard-heading-inline">
+                Status distribution
+                <span class="dashboard-heading-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M5 17h2M5 12h6M5 7h10m2 10h2m-6-5h6m-10-5h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                    </svg>
+                </span>
+            </h2>
             <span class="muted">At a glance</span>
         </div>
         {% if metrics.status_counts %}
@@ -79,7 +225,14 @@
 
     <article class="panel panel-soft panel-scroll">
         <div class="panel-head">
-            <h2>Recent activity</h2>
+            <h2 class="dashboard-heading-inline">
+                Recent activity
+                <span class="dashboard-heading-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M12 7v5l3 3m6-3a9 9 0 1 1-3.14-6.8M21 3v6h-6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+            </h2>
             <span class="muted">Latest updates</span>
         </div>
         {% if activities %}
@@ -100,12 +253,32 @@
 <section class="section-grid section-grid-3">
     <article class="panel panel-soft">
         <div class="panel-head">
-            <h2>Reminders</h2>
+            <h2 class="dashboard-heading-inline">
+                Reminders
+                <span class="dashboard-heading-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.17V11a6 6 0 1 0-12 0v3.17c0 .53-.21 1.04-.59 1.42L4 17h5m6 0a3 3 0 1 1-6 0m6 0H9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+            </h2>
         </div>
         {% if metrics.due_reminders %}
-            <ul class="clean-list">
+            <ul class="clean-list reminder-list">
                 {% for reminder in metrics.due_reminders %}
-                    <li>{{ reminder.message }} <span class="muted">for {{ reminder.job.job_title }}</span></li>
+                    <li class="reminder-list-item">
+                        <div>
+                            <strong>{{ reminder.message }}</strong>
+                            <div class="muted reminder-meta">
+                                for {{ reminder.job.job_title }}
+                                <span>•</span>
+                                {{ reminder.remind_at.strftime("%b %d, %Y %I:%M %p") }}
+                            </div>
+                        </div>
+                        <form action="/jobs/{{ reminder.job_id }}/reminders/{{ reminder.id }}/delete" method="post">
+                            <input type="hidden" name="next_url" value="/dashboard">
+                            <button type="submit" class="danger-button">Delete</button>
+                        </form>
+                    </li>
                 {% endfor %}
             </ul>
         {% else %}
@@ -115,7 +288,14 @@
 
     <article class="panel panel-soft">
         <div class="panel-head">
-            <h2>No response alerts</h2>
+            <h2 class="dashboard-heading-inline">
+                No response alerts
+                <span class="dashboard-heading-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M12 8v5m0 3h.01M10.29 3.86 1.82 18A2 2 0 0 0 3.53 21h16.94A2 2 0 0 0 22.18 18L13.71 3.86a2 2 0 0 0-3.42 0Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+            </h2>
         </div>
         {% if metrics.no_response_alerts %}
             <ul class="clean-list">
@@ -130,7 +310,14 @@
 
     <article class="panel panel-soft">
         <div class="panel-head">
-            <h2>Resume library</h2>
+            <h2 class="dashboard-heading-inline">
+                Resume library
+                <span class="dashboard-heading-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M8 3h6l5 5v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm5 1v5h5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+            </h2>
         </div>
         {% if resumes %}
             <ul class="clean-list clean-list-compact">

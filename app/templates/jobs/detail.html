@@ -39,6 +39,33 @@
 </section>
 
 <section class="section-grid section-grid-2">
+    <article class="panel">
+        <div class="panel-head">
+            <h2>Reminders</h2>
+            <button type="button" class="secondary-button" data-modal-open="reminder-modal-detail-{{ job.id }}">Add reminder</button>
+        </div>
+        {% if reminders %}
+            <ul class="clean-list reminder-list">
+                {% for reminder in reminders %}
+                    <li class="reminder-list-item">
+                        <div>
+                            <strong>{{ reminder.message }}</strong>
+                            <div class="muted reminder-meta">
+                                {{ reminder.remind_at.strftime("%b %d, %Y %I:%M %p") }}
+                            </div>
+                        </div>
+                        <form action="/jobs/{{ job.id }}/reminders/{{ reminder.id }}/delete" method="post">
+                            <input type="hidden" name="next_url" value="/jobs/{{ job.id }}">
+                            <button type="submit" class="danger-button">Delete</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="empty-state">No reminders yet. Add one for follow-ups or check-ins.</p>
+        {% endif %}
+    </article>
+
     <article class="panel panel-fixed">
         <div class="panel-head">
             <h2>Job description</h2>
@@ -75,4 +102,24 @@
         </div>
     </article>
 </section>
+
+<div class="modal-shell" id="reminder-modal-detail-{{ job.id }}" hidden>
+    <div class="modal-backdrop" data-modal-close="reminder-modal-detail-{{ job.id }}"></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="reminder-modal-detail-title-{{ job.id }}">
+        <div class="panel-head">
+            <h2 id="reminder-modal-detail-title-{{ job.id }}">Add reminder</h2>
+            <button type="button" class="ghost-button" data-modal-close="reminder-modal-detail-{{ job.id }}">Close</button>
+        </div>
+        <form action="/jobs/{{ job.id }}/reminders" method="post" class="stack-form">
+            <input type="hidden" name="next_url" value="/jobs/{{ job.id }}">
+            <label>Remind at
+                <input type="datetime-local" name="remind_at" required>
+            </label>
+            <label>Message
+                <input type="text" name="message" placeholder="Follow up with recruiter" required>
+            </label>
+            <button type="submit" class="primary-button">Save reminder</button>
+        </form>
+    </div>
+</div>
 {% endblock %}

@@ -17,6 +17,12 @@ class JobStatus(str, Enum):
     REJECTED = "Rejected"
 
 
+class ContactTopic(str, Enum):
+    FEEDBACK = "Feedback"
+    QUESTION = "Question"
+    GENERAL = "General"
+
+
 class TimestampMixin:
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[datetime] = mapped_column(
@@ -38,6 +44,7 @@ class User(TimestampMixin, Base):
     analyses: Mapped[list["ResumeAnalysis"]] = relationship(back_populates="user", cascade="all, delete-orphan")
     reminders: Mapped[list["Reminder"]] = relationship(back_populates="user", cascade="all, delete-orphan")
     activities: Mapped[list["ActivityLog"]] = relationship(back_populates="user", cascade="all, delete-orphan")
+    contact_submissions: Mapped[list["ContactSubmission"]] = relationship(back_populates="user", cascade="all, delete-orphan")
 
 
 class ResumeVersion(TimestampMixin, Base):
@@ -139,3 +146,16 @@ class ActivityLog(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     user: Mapped["User"] = relationship(back_populates="activities")
+
+
+class ContactSubmission(TimestampMixin, Base):
+    __tablename__ = "contact_submissions"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"), index=True, nullable=True)
+    name: Mapped[str] = mapped_column(Text)
+    email: Mapped[str] = mapped_column(Text, index=True)
+    topic: Mapped[ContactTopic] = mapped_column(SqlEnum(ContactTopic), default=ContactTopic.GENERAL)
+    message: Mapped[str] = mapped_column(Text)
+
+    user: Mapped[User | None] = relationship(back_populates="contact_submissions")

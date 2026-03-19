@@ -90,12 +90,14 @@
                     <a href="/jobs" class="nav-link {% if active_path.startswith('/jobs') %}active{% endif %}">Jobs</a>
                     <a href="/resumes" class="nav-link {% if active_path.startswith('/resumes') %}active{% endif %}">Resumes</a>
                     <a href="/mock-interview" class="nav-link {% if active_path == '/mock-interview' %}active{% endif %}">Mock Interview</a>
+                    <a href="/contact" class="nav-link {% if active_path == '/contact' %}active{% endif %}">Contact Us</a>
                     <form action="/auth/logout" method="post">
                         <button type="submit" class="ghost-button nav-action">Logout</button>
                     </form>
                 {% else %}
                     <a href="/auth/login" class="nav-link">Login</a>
                     <a href="/mock-interview" class="nav-link {% if active_path == '/mock-interview' %}active{% endif %}">Upcoming</a>
+                    <a href="/contact" class="nav-link {% if active_path == '/contact' %}active{% endif %}">Contact Us</a>
                     <a href="/auth/register" class="ghost-button nav-action">Create account</a>
                 {% endif %}
                 </div>

@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Contact Us | AI Job Copilot{% endblock %}
+{% block content %}
+
+
+<section class="contact-layout">
+    <div class="contact-sidebar">
+        <article class="panel panel-soft contact-card">
+            <div class="panel-head">
+                <h2>Contact details</h2>
+            </div>
+            <div class="contact-detail-list">
+                <div class="contact-detail-item">
+                    <span class="contact-detail-label">Name</span>
+                    <strong>Manith Rai</strong>
+                </div>
+                <div class="contact-detail-item">
+                    <span class="contact-detail-label">Email</span>
+                    <a href="mailto:manithkumar3@gmail.com">manithkumar3@gmail.com</a>
+                </div>
+                <div class="contact-detail-item">
+                    <span class="contact-detail-label">LinkedIn</span>
+                    <a href="https://www.linkedin.com/in/manith-kumar-203ab0217" target="_blank" rel="noopener noreferrer">
+                        View LinkedIn profile
+                    </a>
+                </div>
+            </div>
+        </article>
+
+        <article class="panel panel-soft contact-note-card">
+            <div class="panel-head">
+                <h2>What to send</h2>
+            </div>
+            <ul class="bullet-list">
+                <li>Product feedback about the dashboard, resume tools, or job tracker.</li>
+                <li>Questions about how to use the app or ideas for future features.</li>
+                <li>Collaboration or opportunity messages for the creator.</li>
+            </ul>
+        </article>
+    </div>
+
+    <article class="panel panel-soft contact-form-card">
+        <div class="panel-head">
+            <h2>Send feedback or questions</h2>
+        </div>
+        <form action="/contact" method="post" class="stack-form">
+            <label>Name
+                <input type="text" name="name" value="{{ current_user.full_name if current_user else '' }}" placeholder="Enter your name" required>
+            </label>
+            <label>Email
+                <input type="email" name="email" value="{{ current_user.email if current_user else '' }}" required>
+            </label>
+            <label>Topic
+                <select name="topic">
+                    {% for item in contact_topics %}
+                        <option value="{{ item.value }}">{{ item.value }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>Message
+                <textarea name="message" rows="8" placeholder="Share your feedback or ask your question here." required></textarea>
+            </label>
+            <button type="submit" class="primary-button">Send message</button>
+        </form>
+    </article>
+</section>
+{% endblock %}

@@ -862,6 +862,69 @@ input[type="submit"][aria-disabled="true"] {
     white-space: nowrap;
 }
 
+.contact-header {
+    align-items: start;
+}
+
+.contact-header-copy {
+    display: grid;
+    gap: 14px;
+    max-width: 72ch;
+}
+
+.contact-highlight-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.contact-highlight-row span {
+    padding: 9px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid var(--line);
+}
+
+.contact-layout {
+    display: grid;
+    grid-template-columns: minmax(280px, 0.84fr) minmax(0, 1.16fr);
+    gap: 20px;
+    align-items: start;
+}
+
+.contact-sidebar {
+    display: grid;
+    gap: 18px;
+}
+
+.contact-detail-list {
+    display: grid;
+    gap: 18px;
+}
+
+.contact-detail-item {
+    display: grid;
+    gap: 6px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+}
+
+.contact-detail-item:last-child {
+    border-bottom: 0;
+    padding-bottom: 0;
+}
+
+.contact-detail-label {
+    color: var(--muted);
+    font-size: 0.92rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.contact-form-card .stack-form textarea {
+    min-height: 260px;
+}
+
 .stack-form {
     display: flex;
     flex-direction: column;
@@ -1556,6 +1619,7 @@ textarea {
     .dashboard-hero,
     .landing-band,
     .auth-layout,
+    .contact-layout,
     .resumes-workspace,
     .section-grid-2,
     .section-grid-3,
@@ -1599,6 +1663,10 @@ textarea {
 
     .hero h1 {
         max-width: 12ch;
+    }
+
+    .contact-form-card .stack-form textarea {
+        min-height: 220px;
     }
 
     .nav {
@@ -2215,6 +2283,11 @@ textarea {
     .brand-logo {
         width: min(100%, 230px);
         max-height: 48px;
+    }
+
+    .contact-highlight-row {
+        display: grid;
+        grid-template-columns: 1fr;
     }
 
     .nav-toggle {

@@ -10,6 +10,7 @@ from app.database import get_db
 from app.models import Job, JobStatus, Reminder, ResumeVersion
 from app.services.ai import best_resume_for_job, clear_job_prep, generate_job_prep, load_cached_job_prep, store_job_prep
 from app.services.analytics import add_activity
+from app.services.cleanup import delete_job
 from app.services.job_extractor import extract_job_data
 from app.templating import render_template
 
@@ -259,6 +260,37 @@ def job_detail(request: Request, job_id: int, db: Session = Depends(get_db)):
         "jobs/detail.html",
         {"job": job, "reminders": reminders, "analyses": analyses, "job_prep": job_prep},
     )
+
+
+@router.post("/{job_id}/delete")
+def delete_job_entry(
+    request: Request,
+    job_id: int,
+    next_url: str = Form(""),
+    db: Session = Depends(get_db),
+):
+    user, redirect = _require_user(request, db)
+    if redirect:
+        return redirect
+
+    job = db.get(Job, job_id)
+    if not job or job.user_id != user.id:
+        flash(request, "Job not found.", "error")
+        return RedirectResponse(next_url or "/jobs", status_code=303)
+
+    job_summary = f"{job.job_title} at {job.company_name}"
+    cleanup_summary = delete_job(db, job)
+    db.commit()
+
+    details = f"Removed {job_summary}"
+    if cleanup_summary["deleted_reminders"] or cleanup_summary["deleted_analyses"]:
+        details += (
+            f" with {cleanup_summary['deleted_reminders']} reminders"
+            f" and {cleanup_summary['deleted_analyses']} analyses"
+        )
+    add_activity(db, user.id, "Deleted job", details)
+    flash(request, "Job deleted.", "success")
+    return RedirectResponse(next_url or "/jobs", status_code=303)
 
 @router.post("/{job_id}/status")
 def update_status(

@@ -70,6 +70,10 @@
                         <a href="{{ job.job_link }}" target="_blank" rel="noopener noreferrer" class="ghost-button">Open link</a>
                     {% endif %}
                     <a href="/jobs/{{ job.id }}" class="secondary-button">View</a>
+                    <form action="/jobs/{{ job.id }}/delete" method="post" onsubmit="return confirm('Delete this job and its related reminders and analyses?');">
+                        <input type="hidden" name="next_url" value="/jobs">
+                        <button type="submit" class="danger-button">Delete</button>
+                    </form>
                 </div>
             </div>
         </article>

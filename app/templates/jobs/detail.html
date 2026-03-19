@@ -13,6 +13,10 @@
     </div>
     <div class="header-actions">
         <a href="/jobs/{{ job.id }}/edit" class="secondary-button">Edit</a>
+        <form action="/jobs/{{ job.id }}/delete" method="post" onsubmit="return confirm('Delete this job and its related reminders and analyses?');">
+            <input type="hidden" name="next_url" value="/jobs">
+            <button type="submit" class="danger-button">Delete job</button>
+        </form>
     </div>
 </section>
 

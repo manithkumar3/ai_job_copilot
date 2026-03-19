@@ -37,7 +37,12 @@
                                 <strong>{{ resume.name }}</strong>
                                 <span class="muted">{{ resume.source_filename }}</span>
                             </div>
-                            <a href="/resumes/{{ resume.id }}/download">Download</a>
+                            <div class="inline-form resume-actions">
+                                <a href="/resumes/{{ resume.id }}/download" class="ghost-button">Download</a>
+                                <form action="/resumes/{{ resume.id }}/delete" method="post" onsubmit="return confirm('Delete this resume and its related analyses?');">
+                                    <button type="submit" class="danger-button">Delete</button>
+                                </form>
+                            </div>
                         </li>
                     {% endfor %}
                 </ul>

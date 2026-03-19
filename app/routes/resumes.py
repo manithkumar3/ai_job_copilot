@@ -11,6 +11,7 @@ from app.database import get_db
 from app.models import Job, ResumeAnalysis, ResumeVersion
 from app.services.ai import analyze_resume
 from app.services.analytics import add_activity
+from app.services.cleanup import delete_resume_version
 from app.services.file_parser import build_docx_resume, extract_text, save_upload
 from app.services.job_extractor import extract_job_data
 from app.templating import render_template
@@ -85,6 +86,29 @@ def download_resume(request: Request, resume_id: int, db: Session = Depends(get_
         flash(request, "Resume not found.", "error")
         return RedirectResponse("/resumes", status_code=303)
     return FileResponse(path=resume.file_path, filename=resume.source_filename)
+
+
+@router.post("/{resume_id}/delete")
+def delete_resume(request: Request, resume_id: int, db: Session = Depends(get_db)):
+    user, redirect = _require_user(request, db)
+    if redirect:
+        return redirect
+
+    resume = db.get(ResumeVersion, resume_id)
+    if not resume or resume.user_id != user.id:
+        flash(request, "Resume not found.", "error")
+        return RedirectResponse("/resumes", status_code=303)
+
+    resume_name = resume.name
+    cleanup_summary = delete_resume_version(db, resume)
+    db.commit()
+
+    details = f"Removed {resume_name}"
+    if cleanup_summary["deleted_analyses"]:
+        details += f" and {cleanup_summary['deleted_analyses']} related analyses"
+    add_activity(db, user.id, "Deleted resume", details)
+    flash(request, "Resume deleted.", "success")
+    return RedirectResponse("/resumes", status_code=303)
 
 
 @router.post("/analyze")

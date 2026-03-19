@@ -644,6 +644,16 @@ input[type="submit"][aria-disabled="true"] {
     border-bottom: 1px solid var(--line);
 }
 
+.resume-actions {
+    flex: 0 0 auto;
+}
+
+.resume-actions form,
+.job-secondary-actions form,
+.header-actions form {
+    margin: 0;
+}
+
 .activity-list li {
     flex-direction: column;
     align-items: start;
@@ -915,8 +925,20 @@ textarea {
 
 .job-secondary-actions {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 10px;
+}
+
+.job-secondary-actions > * {
+    width: 100%;
+}
+
+.job-secondary-actions form {
+    display: flex;
+}
+
+.job-secondary-actions form .danger-button {
+    width: 100%;
 }
 
 .job-status-form .secondary-button,

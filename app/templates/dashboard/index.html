@@ -254,6 +254,30 @@
     <article class="panel panel-soft">
         <div class="panel-head">
             <h2 class="dashboard-heading-inline">
+                Resume library
+                <span class="dashboard-heading-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M8 3h6l5 5v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm5 1v5h5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+                    </svg>
+                </span>
+            </h2>
+        </div>
+        {% if resumes %}
+            <ul class="clean-list clean-list-compact">
+                {% for resume in resumes[:4] %}
+                    <li class="resume-library-item">
+                        <strong>{{ resume.name }}</strong>
+                        <span class="muted">{{ resume.source_filename }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="empty-state">Upload your first resume to get started.</p>
+        {% endif %}
+    </article>
+    <article class="panel panel-soft">
+        <div class="panel-head">
+            <h2 class="dashboard-heading-inline">
                 Reminders
                 <span class="dashboard-heading-icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none">
@@ -283,53 +307,6 @@
             </ul>
         {% else %}
             <p class="empty-state">No reminders yet.</p>
-        {% endif %}
-    </article>
-
-    <article class="panel panel-soft">
-        <div class="panel-head">
-            <h2 class="dashboard-heading-inline">
-                No response alerts
-                <span class="dashboard-heading-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M12 8v5m0 3h.01M10.29 3.86 1.82 18A2 2 0 0 0 3.53 21h16.94A2 2 0 0 0 22.18 18L13.71 3.86a2 2 0 0 0-3.42 0Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </span>
-            </h2>
-        </div>
-        {% if metrics.no_response_alerts %}
-            <ul class="clean-list">
-                {% for job in metrics.no_response_alerts %}
-                    <li>{{ job.company_name }} - {{ job.job_title }}</li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p class="empty-state">Nothing stale right now.</p>
-        {% endif %}
-    </article>
-
-    <article class="panel panel-soft">
-        <div class="panel-head">
-            <h2 class="dashboard-heading-inline">
-                Resume library
-                <span class="dashboard-heading-icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" fill="none">
-                        <path d="M8 3h6l5 5v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm5 1v5h5" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
-                    </svg>
-                </span>
-            </h2>
-        </div>
-        {% if resumes %}
-            <ul class="clean-list clean-list-compact">
-                {% for resume in resumes[:4] %}
-                    <li class="resume-library-item">
-                        <strong>{{ resume.name }}</strong>
-                        <span class="muted">{{ resume.source_filename }}</span>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p class="empty-state">Upload your first resume to get started.</p>
         {% endif %}
     </article>
 </section>

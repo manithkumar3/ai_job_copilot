@@ -14,7 +14,7 @@ class Settings(BaseSettings):
 
     app_name: str = "AI Job Copilot"
     secret_key: str = "change-me"
-    base_url: str = "http://127.0.0.1:8000"
+    base_url: str = "https://ai-job-copilot-1-mgy3.onrender.com"
     debug: bool = True
 
     database_url: str = f"sqlite:///{(BASE_DIR / 'ai_job_copilot.db').as_posix()}"

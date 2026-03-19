@@ -78,6 +78,8 @@ python3 scripts/seed_data.py
 
 Open the app at `http://127.0.0.1:8000`.
 
+For external uptime monitoring, you can point UptimeRobot at `http://127.0.0.1:8000/health` and use the `HEAD` method.
+
 ## Environment variables
 
 Important values:

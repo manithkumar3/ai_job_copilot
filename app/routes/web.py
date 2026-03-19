@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, Response
 from fastapi.responses import RedirectResponse
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -14,6 +14,13 @@ from app.templating import render_template
 
 
 router = APIRouter(tags=["web"])
+
+
+@router.api_route("/health", methods=["GET", "HEAD"])
+def healthcheck(request: Request) -> Response:
+    if request.method == "HEAD":
+        return Response(status_code=200)
+    return Response(content="ok", media_type="text/plain", status_code=200)
 
 
 @router.get("/")

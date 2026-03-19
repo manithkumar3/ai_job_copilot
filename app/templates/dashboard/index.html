@@ -322,7 +322,10 @@
         {% if resumes %}
             <ul class="clean-list clean-list-compact">
                 {% for resume in resumes[:4] %}
-                    <li>{{ resume.name }} <span class="muted">{{ resume.source_filename }}</span></li>
+                    <li class="resume-library-item">
+                        <strong>{{ resume.name }}</strong>
+                        <span class="muted">{{ resume.source_filename }}</span>
+                    </li>
                 {% endfor %}
             </ul>
         {% else %}

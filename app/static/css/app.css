@@ -644,8 +644,20 @@ input[type="submit"][aria-disabled="true"] {
     border-bottom: 1px solid var(--line);
 }
 
+.resume-list li > div:first-child {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.resume-list li .muted {
+    display: block;
+    overflow-wrap: anywhere;
+}
+
 .resume-actions {
     flex: 0 0 auto;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
 .resume-actions form,
@@ -767,6 +779,23 @@ input[type="submit"][aria-disabled="true"] {
     gap: 12px;
     padding: 10px 0;
     border-bottom: 1px solid var(--line);
+}
+
+.resume-library-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+}
+
+.resume-library-item strong,
+.resume-library-item .muted {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.resume-library-item .muted {
+    display: block;
+    text-align: right;
 }
 
 .bullet-list {
@@ -924,12 +953,14 @@ textarea {
 }
 
 .job-secondary-actions {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    display: flex;
+    flex-wrap: nowrap;
     gap: 10px;
 }
 
 .job-secondary-actions > * {
+    flex: 1 1 0;
+    min-width: 0;
     width: 100%;
 }
 
